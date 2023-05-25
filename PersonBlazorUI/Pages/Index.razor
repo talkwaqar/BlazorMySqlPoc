@@ -1,0 +1,94 @@
+﻿@page "/"
+@using PersonDemo.Shared.Models
+@using PersonDemoBlazorUI.Services
+@inject PersonService PersonService
+
+<h3>Persons</h3>
+
+@if (persons == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    foreach (var person in persons)
+    {
+        <p>
+            Name: @person.Name<br />
+            Telephone: @person.Telephone<br />
+            Email: @person.Email<br />
+            <button @onclick="() => StartEditingPerson(person)">Edit</button>
+            <button @onclick="() => DeletePerson(person.Id)">Delete</button>
+        </p>
+    }
+}
+
+@if (editingPerson != null)
+{
+    <h3>Edit Person</h3>
+
+    <EditForm Model="editingPerson" OnValidSubmit="UpdatePerson">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputText id="name" @bind-Value="editingPerson.Name" placeholder="Name" />
+        <InputText id="telephone" @bind-Value="editingPerson.Telephone" placeholder="Telephone" />
+        <InputText id="email" @bind-Value="editingPerson.Email" placeholder="Email" />
+
+        <button type="submit">Save</button>
+    </EditForm>
+}
+
+<h3>Add Person</h3>
+
+<EditForm Model="newPerson" OnValidSubmit="AddPerson">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText id="name" @bind-Value="newPerson.Name" placeholder="Name" />
+    <InputText id="telephone" @bind-Value="newPerson.Telephone" placeholder="Telephone" />
+    <InputText id="email" @bind-Value="newPerson.Email" placeholder="Email" />
+
+    <button type="submit">Add</button>
+</EditForm>
+
+@code {
+    private List<Person> persons;
+    private Person newPerson = new Person();
+    private Person editingPerson;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPersons();
+    }
+
+    private async Task LoadPersons()
+    {
+        persons = await PersonService.GetPersonsAsync();
+    }
+
+    private void StartEditingPerson(Person person)
+    {
+        editingPerson = person;
+    }
+
+    private async Task AddPerson()
+    {
+        await PersonService.AddPersonAsync(newPerson);
+        newPerson = new Person(); // Clear the form
+        await LoadPersons(); // Reload the list
+    }
+
+    private async Task UpdatePerson()
+    {
+        await PersonService.UpdatePersonAsync(editingPerson);
+        editingPerson = null; // Stop editing
+        await LoadPersons(); // Reload the list
+    }
+
+    private async Task DeletePerson(int id)
+    {
+        await PersonService.DeletePersonAsync(id);
+        await LoadPersons(); // Reload the list
+    }
+}
