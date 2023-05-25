@@ -18,7 +18,7 @@ namespace PersonDemoWebApi.Controllers
             _context = context;
         }
 
-        // GET: api/Persons
+        // GET: api/Person
         [HttpGet]
         public async Task<ActionResult> GetPeople()
         {
@@ -26,7 +26,7 @@ namespace PersonDemoWebApi.Controllers
             return Ok(list);
         }
 
-        // GET: api/Persons/5
+        // GET: api/Person/5
         [HttpGet("{id}")]
         public async Task<Person> GetPerson(int id)
         {
@@ -40,7 +40,7 @@ namespace PersonDemoWebApi.Controllers
             return person;
         }
 
-        // POST: api/Persons
+        // POST: api/Person
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson([FromBody] Person person)
         {
@@ -50,7 +50,7 @@ namespace PersonDemoWebApi.Controllers
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
 
-        // PUT: api/Persons/5
+        // PUT: api/Person/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPerson(int id, Person person)
         {
@@ -81,7 +81,7 @@ namespace PersonDemoWebApi.Controllers
         }
 
 
-        // DELETE: api/Persons/5
+        // DELETE: api/Person/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)
         {
