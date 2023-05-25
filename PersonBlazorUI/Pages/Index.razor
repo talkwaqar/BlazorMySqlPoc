@@ -39,18 +39,20 @@ else
     </EditForm>
 }
 
-<h3>Add Person</h3>
+@if (editingPerson == null)
+{
+    <h3>Add Person</h3>
+    <EditForm Model="newPerson" OnValidSubmit="AddPerson">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-<EditForm Model="newPerson" OnValidSubmit="AddPerson">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+        <InputText id="name" @bind-Value="newPerson.Name" placeholder="Name" />
+        <InputText id="telephone" @bind-Value="newPerson.Telephone" placeholder="Telephone" />
+        <InputText id="email" @bind-Value="newPerson.Email" placeholder="Email" />
 
-    <InputText id="name" @bind-Value="newPerson.Name" placeholder="Name" />
-    <InputText id="telephone" @bind-Value="newPerson.Telephone" placeholder="Telephone" />
-    <InputText id="email" @bind-Value="newPerson.Email" placeholder="Email" />
-
-    <button type="submit">Add</button>
-</EditForm>
+        <button type="submit">Add</button>
+    </EditForm>
+}
 
 @code {
     private List<Person> persons;
